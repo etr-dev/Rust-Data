@@ -2,3 +2,6 @@ node_modules
 *.env
 bin
 *.pem
+yarn-error.log
+il2cpp
+rust_client

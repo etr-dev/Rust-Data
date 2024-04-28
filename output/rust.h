@@ -1,7 +1,14 @@
 #pragma once
 #include <cstdint>
 
+// Offsets updated by: https://github.com/erobin27/Rust-Data
+
 namespace RustOffsets {
+	inline constexpr ::std::ptrdiff_t BaseEntity_TypeInfo = 0x3aceda0; // BaseEntity_TypeInfo
+	inline constexpr ::std::ptrdiff_t Facepunch_Input_TypeInfo = 0x3aa3bc0; // Facepunch_Input_TypeInfo
+	inline constexpr ::std::ptrdiff_t MainCamera_TypeInfo = 0x3ab9e00; // MainCamera_TypeInfo
+	inline constexpr ::std::ptrdiff_t System_Collections_Generic_List_BaseGameMode__TypeInfo = 0x3affe78; // System_Collections_Generic_List_BaseGameMode__TypeInfo
+	inline constexpr ::std::ptrdiff_t BaseGameMode_TypeInfo = 0x3acf008; // BaseGameMode_TypeInfo
 	namespace BasePlayer {
 		inline constexpr ::std::ptrdiff_t __menuOption_Climb = 0x290; // __menuOption_Climb
 		inline constexpr ::std::ptrdiff_t __menuOption_Drink = 0x310; // __menuOption_Drink

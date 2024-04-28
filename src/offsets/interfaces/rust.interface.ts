@@ -1,6 +1,12 @@
 import { IOffset } from "./offset.interface";
 
 export interface RustOffsets {
+    BaseEntity_TypeInfo?: IOffset;
+    Facepunch_Input_TypeInfo?: IOffset;
+    MainCamera_TypeInfo?: IOffset;
+    System_Collections_Generic_List_BaseGameMode_TypeInfo?: IOffset;
+    BaseGameMode_TypeInfo?: IOffset;
+
     BasePlayer: IOffset[],
     BaseEntity: IOffset[],
     BaseCombatEntity: IOffset[],
@@ -22,5 +28,5 @@ export interface RustOffsets {
     OcclusionCulling: IOffset[],
     OcclusionCulling_DebugSettings: IOffset[],
 
-    [key: string]: IOffset[],
+    [key: string]: IOffset[] | IOffset | undefined,
 }

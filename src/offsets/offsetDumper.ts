@@ -1,17 +1,24 @@
 import fs, { readFileSync } from 'fs';
 import { strict as assert } from 'assert';
 import { IOffset } from './interfaces/offset.interface';
+import { IScriptJson } from './interfaces/scriptJson.interface';
 
 export class OffsetDumper {
     private dumpPath: string;
     private dumpData;
+    private scriptPath: string;
+    private scriptData;
 
-    constructor(dumpCsPath: string) {
+    constructor(dumpCsPath: string, scriptPath: string) {
         if (!dumpCsPath) throw new Error('Undefined dumpCsFilePath');
 
         this.dumpPath = dumpCsPath;
         const data = fs.readFileSync(dumpCsPath, 'utf8');
         this.dumpData = this.findAndTrimData(data, "public class BaseCombatEntity : BaseEntity");
+
+        
+        this.scriptPath = scriptPath;
+        this.scriptData = fs.readFileSync(scriptPath, 'utf8');
     }
 
     private findAndTrimData(dumpData: string, searchTerm: string): string {
@@ -76,4 +83,13 @@ export class OffsetDumper {
         return output;
     }
 
+    scriptScan(classname: string): IOffset | undefined {
+        const data: IScriptJson = JSON.parse(this.scriptData);
+        const entry = data.ScriptMetadata.find(entry=> entry.Name===classname)
+        if(!entry || !entry.Address) { 
+            console.log(`${classname} NOT FOUND.`); 
+            return undefined;
+        }
+        return { name: classname.replace(/[^\p{L}]/gu, '_'), offset: `0x${entry.Address.toString(16)}`, type: ''};
+    }
 }
