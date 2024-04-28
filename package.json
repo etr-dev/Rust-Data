@@ -1,0 +1,28 @@
+{
+  "name": "Rust-Data",
+  "version": "1.0.0",
+  "description": "Gather and parse data for Rust Game.",
+  "main": "app.js",
+  "repository": "https://github.com/erobin27/Rust-Data.git",
+  "author": "erobin27",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "start": "node ./bin/app.js",
+    "start:dev": "rimraf bin && ts-node ./src/app.ts",
+    "dev": "ts-node ./src/app.ts"
+  },
+  "dependencies": {
+    "@octokit/auth-app": "^6.1.1",
+    "@octokit/rest": "^20.1.0",
+    "@types/node": "^20.12.7",
+    "axios": "^1.6.8",
+    "dotenv": "^16.4.5",
+    "jsonwebtoken": "^9.0.2",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2"
+  }
+}
