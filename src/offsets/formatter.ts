@@ -16,6 +16,7 @@ export class Formatter {
 
         const variableFormat = (input: {name: string; type: string; offset: string}, tabs = 2) => {
             const { name, type, offset } = input;
+            console.log(type);
             const tab = '\t'.repeat(tabs);
             return `${tab}inline constexpr ::std::ptrdiff_t ${name} = ${offset}; // ${type}\n`;
         };
@@ -33,7 +34,7 @@ export class Formatter {
             if (Array.isArray(this.offsets[className])) {
                 fileContent += `\tnamespace ${className} {\n`;
                 (this.offsets[className] as IOffset[]).forEach(offset => {
-                    fileContent += variableFormat({ name: offset.name, type: offset.name, offset: offset.offset });
+                    fileContent += variableFormat(offset);
                 });
                 fileContent += `\t} // ${className}\n`;
             } else {

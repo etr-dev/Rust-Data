@@ -1,0 +1,10 @@
+Steam Console Client (c) Valve Corporation - version 1709846822
+-- type 'quit' to exit --
+Loading Steam API...OK
+Logging in user 'jw2ie8wu8lu4' to Steam Public...OK
+Waiting for client config...OK
+Waiting for user info...OK
+Redirecting stderr to 'C:\Users\Elijah\AppData\Local\Microsoft\WinGet\Packages\Valve.SteamCMD_Microsoft.Winget.Source_8wekyb3d8bbwe\logs\stderr.txt'
+Logging directory: 'C:\Users\Elijah\AppData\Local\Microsoft\WinGet\Packages\Valve.SteamCMD_Microsoft.Winget.Source_8wekyb3d8bbwe/logs'
+[  0%] Checking for available updates...
+[----] Verifying installation...

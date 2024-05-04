@@ -42,10 +42,10 @@ export class OffsetDumper {
         const regexStatic = /(public|private|protected|internal)\sstatic\s(\w+\.?\w*\.?\w*)\s(\w+);\s\/\/\s(0x[0-9a-fA-F]+)/;
 
         const idx = this.dumpData.indexOf(className);
-        assert(idx !== -1, "Class name not found in dump data");
+        assert(idx !== -1, `Class name not found in dump data: ${className}`);
 
         const nextIdx = this.dumpData.indexOf("// Namespace:", idx + className.length);
-        assert(nextIdx !== -1, "Next class namespace marker not found");
+        assert(nextIdx !== -1, `Next class namespace marker not found: ${className}`);
 
         const clazz = this.dumpData.substring(idx, nextIdx);
 

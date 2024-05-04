@@ -5,6 +5,8 @@ import { RustOffsets } from "./offsets/interfaces/rust.interface";
 import { OffsetDumper } from "./offsets/offsetDumper";
 import dotenv from 'dotenv';
 import { exec, spawn } from 'child_process';
+import { ItemIdFormatter } from "./itemIds/itemIdFormatter";
+import { itemIds } from "./itemIds/ids";
 
 dotenv.config();
 
@@ -22,6 +24,10 @@ const dumpOffsets = (dumpCsFilePath: string, scriptFilePath: string, outputFileP
     const BasePlayer = dumper.basicScan("public class BasePlayer : BaseCombatEntity, LootPanel.IHasLootPanel");
     const BaseEntity = dumper.basicScan("public class BaseEntity : BaseNetworkable, IProvider");
     const BaseCombatEntity = dumper.basicScan("public class BaseCombatEntity : BaseEntity");
+    const BaseCorpse = dumper.basicScan("public class BaseCorpse : BaseCombatEntity");
+    const LootableCorpse = dumper.basicScan("public class LootableCorpse : BaseCorpse, LootPanel.IHasLootPanel");
+    const PlayerCorpse = dumper.basicScan("public class PlayerCorpse : LootableCorpse");
+
     const BuildingPrivlidge = dumper.basicScan("public class BuildingPrivlidge : StorageContainer");
     const BaseProjectile = dumper.basicScan("public class BaseProjectile : AttackEntity");
     const Magazine = dumper.basicScan("public class BaseProjectile.Magazine");
@@ -50,6 +56,9 @@ const dumpOffsets = (dumpCsFilePath: string, scriptFilePath: string, outputFileP
         BasePlayer,
         BaseEntity,
         BaseCombatEntity,
+        BaseCorpse,
+        LootableCorpse,
+        PlayerCorpse,
         BuildingPrivlidge,
         BaseProjectile,
         Magazine,
@@ -73,7 +82,32 @@ const dumpOffsets = (dumpCsFilePath: string, scriptFilePath: string, outputFileP
     formatter.toInlineHeaderFile(outputFilePath);
 }
 
-async function main() {
+function parseKeyValue(input: string): any {
+    const stack: any[] = [{}];
+    const lines = input.split('\n').map(line => line.trim()).filter(line => line && !line.startsWith('//'));
+
+    lines.forEach(line => {
+        if (line.includes("{")) {
+            const key = line.split("{")[0].trim().replace(/"/g, '');
+            const newObject = {};
+            if (key) stack[0][key] = newObject;
+            stack.unshift(newObject);
+        } else if (line.includes("}")) {
+            stack.shift();
+        } else {
+            const parts = line.split(/"\s+"/).map(part => part.replace(/"/g, ''));
+            if (parts.length >= 2) {
+                const key = parts[0].trim();
+                const value = parts.slice(1).join(' ');
+                stack[0][key] = value;
+            }
+        }
+    });
+
+    return stack.pop();
+}
+
+async function main(steps: ISteps) {
     // PART 1: Update Rust
     async function executeCommand(command: string, args: string[] = []) {
         return new Promise((resolve, reject) => {
@@ -97,45 +131,92 @@ async function main() {
             });
         });
     }
+
     
-    console.log('PART 1: Downloading Rust');
-    console.log('--------------------------------------');
     const rustInstallPath = `${process.cwd()}/rust_client`;
-    const updateRustCommand = `steamcmd +force_install_dir ${rustInstallPath} +login ${process.env.STEAM_USERNAME} ${process.env.STEAM_PW} +app_update 252490 validate +quit`;
-    const checkGameVersionCommand = `steamcmd +login ${process.env.STEAM_USERNAME} ${process.env.STEAM_PW} +app_info_update 1 +app_info_print 252490 +quit`
+    const il2cppDumpOutputPath = `${process.cwd()}/il2cpp/output`;
+    const offsetOutputFile = './output/rust.h';// process.env.HEADER_OUTPUT as string;
+    const itemIdOutputFile = './output/rust_items.h';
+    const versionInfoOutput = './output/version_info.txt';
 
-    await executeCommand(updateRustCommand);
-    console.log('\nPART 1B: Check game version command...');
-    console.log('--------------------------------------');
-    await executeCommand(checkGameVersionCommand);
+    if (steps.download) {
+        console.log('PART 1: Downloading Rust');
+        console.log('--------------------------------------');
+        const updateRustCommand = `steamcmd +force_install_dir ${rustInstallPath} +login ${process.env.STEAM_USERNAME} ${process.env.STEAM_PW} +app_update 252490 validate +quit`;
+        await executeCommand(updateRustCommand);
+    }
 
-    
-    // // // PART 2: Run IL2CPP on Rust
-    console.log('\nPART 2: IL2CPP Dump');
-    console.log('--------------------------------------');
-    const il2cppDumperExecPath = `${process.cwd()}/il2cpp/Il2CppDumper.exe`;
-    const il2cppDumpOutputPath = `${process.cwd()}/il2cpp/output`
-    const gameAssemblyPath = `${rustInstallPath}/GameAssembly.dll`
-    const metadataPath = `${rustInstallPath}/RustClient_Data/il2cpp_data/Metadata/global-metadata.dat`
-    const il2cppCommand = `${il2cppDumperExecPath} ${gameAssemblyPath} ${metadataPath} ${il2cppDumpOutputPath}`
-    await executeCommand(il2cppCommand);
-    
-    
-    // // PART 3: Dump the rust offsets
-    console.log('\nPART 3: Dump the rust offsets');
-    console.log('--------------------------------------');
-    const outputFile = process.env.HEADER_OUTPUT as string;
-    const dumpCsPath = `${il2cppDumpOutputPath}/dump.cs`
-    const scriptPath = `${il2cppDumpOutputPath}/script.json`
-    dumpOffsets(dumpCsPath, scriptPath, outputFile);
-    console.log('Offsets dumped: ', outputFile);
+    if (steps.checkVer) {
+        console.log('\nPART 1B: Check game version command...');
+        console.log('--------------------------------------');
+        const checkGameVersionCommand = `steamcmd +login ${process.env.STEAM_USERNAME} ${process.env.STEAM_PW} +app_info_update 1 +app_info_print 252490 +quit > ${versionInfoOutput}`
+        await executeCommand(checkGameVersionCommand);
+    }
 
-    // PART 4: Push offsets to github repo
-    console.log('\nPART 4: Push offsets to GitHub');
-    console.log('--------------------------------------');
-    const github = new Github('erobin27', 'Rust-DMA');
-    await github.commitFile(outputFile, 'RustDMA/SDK/rust.h', `Offset Updates: ${new Date().toISOString()}`);
-    console.log('Offsets comitted!');
+
+    //PART 2: Run IL2CPP on Rust
+    if (steps.dump) {
+        console.log('\nPART 2: IL2CPP Dump');
+        console.log('--------------------------------------');
+        const il2cppDumperExecPath = `${process.cwd()}/il2cpp/Il2CppDumper.exe`;
+        const gameAssemblyPath = `${rustInstallPath}/GameAssembly.dll`
+        const metadataPath = `${rustInstallPath}/RustClient_Data/il2cpp_data/Metadata/global-metadata.dat`
+        const il2cppCommand = `${il2cppDumperExecPath} ${gameAssemblyPath} ${metadataPath} ${il2cppDumpOutputPath}`
+        await executeCommand(il2cppCommand);
+    }
+    
+    // PART 3: Dump the rust offsets
+    if (steps.offsets) {
+        console.log('\nPART 3: Dump the rust offsets');
+        console.log('--------------------------------------');
+        const dumpCsPath = `${il2cppDumpOutputPath}/dump.cs`
+        const scriptPath = `${il2cppDumpOutputPath}/script.json`
+        dumpOffsets(dumpCsPath, scriptPath, offsetOutputFile);
+        console.log('Offsets dumped: ', offsetOutputFile);
+    }
+
+    // PART 4: Dump the rust itemIds - TODO: make getting itemIds automated
+    if (steps.itemIds) {
+        console.log('\nPART 4: Dump the item ids');
+        console.log('--------------------------------------');
+        const itemFormatter = new ItemIdFormatter(itemIds);
+        itemFormatter.toInlineHeaderFile(itemIdOutputFile);
+        console.log('ItemIds dumped: ', itemIdOutputFile);
+    }
+
+    // PART 5: Push offsets to github repo
+    if (steps.github) {
+        console.log('\nPART 5: Push offsets to GitHub');
+        console.log('--------------------------------------');
+        const github = new Github('erobin27', 'Rust-DMA');
+        await github.commitFile(offsetOutputFile, 'RustDMA/SDK/rust.h', `Offset Updates: ${new Date().toISOString()}`);
+
+        const date = new Date();
+        const time = `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}` 
+        await github.commitFiles([
+            { filePath: offsetOutputFile, githubPath: 'RustDMA/SDK/rust.h'},
+            { filePath: itemIdOutputFile, githubPath: 'RustDMA/SDK/rust_items.h'},
+        ], `Offset & ItemId Updates: ${time}`)
+        console.log('Offsets comitted!', time);
+    }
 }
 
-main().catch(console.error); 
+
+interface ISteps {
+    download: boolean;
+    checkVer: boolean;
+    dump: boolean;
+    offsets: boolean;
+    itemIds: boolean;
+    github: boolean;
+}
+
+const steps: ISteps = {
+    download: false,
+    checkVer: false,
+    dump: false,
+    offsets: true,
+    itemIds: false,
+    github: true,
+}
+main(steps).catch(console.error); 

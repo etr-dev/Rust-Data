@@ -63,18 +63,16 @@ export class Github {
     return data.sha;
   }
 
-  async createTree(baseTreeSha: string, path: string, blobSha: string) {
+  async createTree(baseTreeSha: string, blobs: {path: string, sha: string}[]) {
     const { data } = await this.octokit.git.createTree({
       owner: this.username,
       repo: this.reponame,
-      tree: [
-        {
-          path,
-          mode: '100644', // this is a typical file mode for non-executable files
-          type: 'blob',
-          sha: blobSha
-        }
-      ],
+      tree: blobs.map(blob => ({
+        path: blob.path,
+        mode: '100644',
+        type: 'blob',
+        sha: blob.sha
+      })),
       base_tree: baseTreeSha
     });
     return data.sha;
@@ -111,7 +109,27 @@ export class Github {
     });
     const baseTreeSha = refData.object.sha;
 
-    const treeSha = await this.createTree(baseTreeSha, githubPath, blobSha);
+    const treeSha = await this.createTree(baseTreeSha, [{path: githubPath, sha: blobSha}]);
+    const commitSha = await this.createCommit(baseTreeSha, treeSha, commitMessage);
+    await this.updateRef(commitSha);
+  }
+
+  async commitFiles(fileChanges: {filePath: string, githubPath: string}[], commitMessage: string) {
+    const blobShas = await Promise.all(
+      fileChanges.map(async change => ({
+        path: change.githubPath,
+        sha: await this.createBlob(readFileSync(change.filePath, 'utf8'))
+      }))
+    );
+
+    const { data: refData } = await this.octokit.git.getRef({
+      owner: this.username,
+      repo: this.reponame,
+      ref: 'heads/main'
+    });
+    const baseTreeSha = refData.object.sha;
+
+    const treeSha = await this.createTree(baseTreeSha, blobShas);
     const commitSha = await this.createCommit(baseTreeSha, treeSha, commitMessage);
     await this.updateRef(commitSha);
   }
