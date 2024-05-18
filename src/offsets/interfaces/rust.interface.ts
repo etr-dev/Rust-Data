@@ -6,6 +6,7 @@ export interface RustOffsets {
     MainCamera_TypeInfo?: IOffset;
     System_Collections_Generic_List_BaseGameMode_TypeInfo?: IOffset;
     BaseGameMode_TypeInfo?: IOffset;
+    LocalPlayer_TypeInfo?: IOffset;
 
     BasePlayer: IOffset[],
     BaseEntity: IOffset[],

@@ -4,11 +4,12 @@
 // Offsets updated by: https://github.com/erobin27/Rust-Data
 
 namespace RustOffsets {
-	inline constexpr ::std::ptrdiff_t BaseEntity_TypeInfo = 0x3b4db68; // BaseEntity_TypeInfo
-	inline constexpr ::std::ptrdiff_t Facepunch_Input_TypeInfo = 0x3b22bb8; // Facepunch_Input_TypeInfo
-	inline constexpr ::std::ptrdiff_t MainCamera_TypeInfo = 0x3b39c98; // MainCamera_TypeInfo
-	inline constexpr ::std::ptrdiff_t System_Collections_Generic_List_BaseGameMode__TypeInfo = 0x3b7e0a0; // System_Collections_Generic_List_BaseGameMode__TypeInfo
-	inline constexpr ::std::ptrdiff_t BaseGameMode_TypeInfo = 0x3b4ddd0; // BaseGameMode_TypeInfo
+	inline constexpr ::std::ptrdiff_t BaseEntity_TypeInfo = 0x3b4db78; // BaseEntity_TypeInfo
+	inline constexpr ::std::ptrdiff_t Facepunch_Input_TypeInfo = 0x3b22bc8; // Facepunch_Input_TypeInfo
+	inline constexpr ::std::ptrdiff_t MainCamera_TypeInfo = 0x3b39ca8; // MainCamera_TypeInfo
+	inline constexpr ::std::ptrdiff_t System_Collections_Generic_List_BaseGameMode__TypeInfo = 0x3b7e0b0; // System_Collections_Generic_List_BaseGameMode__TypeInfo
+	inline constexpr ::std::ptrdiff_t BaseGameMode_TypeInfo = 0x3b4dde0; // BaseGameMode_TypeInfo
+	inline constexpr ::std::ptrdiff_t LocalPlayer_TypeInfo = 0x3b36e80; // LocalPlayer_TypeInfo
 	namespace BasePlayer {
 		inline constexpr ::std::ptrdiff_t __menuOption_Climb = 0x280; // Option
 		inline constexpr ::std::ptrdiff_t __menuOption_Drink = 0x2F0; // Option
