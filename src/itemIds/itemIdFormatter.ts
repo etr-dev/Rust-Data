@@ -1,9 +1,17 @@
 import {  writeFileSync } from 'fs';
 import { IRustItemIds } from './itemIds.interface';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+// Extend dayjs with the plugins
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export class ItemIdFormatter {
     private itemIds: IRustItemIds;
-    private message = `ItemsIds updated by: https://github.com/erobin27/Rust-Data`
+    private message = `ItemIds updated by: https://github.com/erobin27/Rust-Data\n// ${dayjs().tz('America/New_York').format('dddd, M/D/YYYY - h:mm:ssA [EST]')}` // Friday, 5/17/2024 - 6:41:11PM EST
+
 
     constructor(itemIds: IRustItemIds) {
         this.itemIds = itemIds;

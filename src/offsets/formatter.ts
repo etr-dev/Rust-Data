@@ -2,10 +2,17 @@ import fs, { readFileSync, writeFileSync } from 'fs';
 import { strict as assert } from 'assert';
 import { IOffset } from './interfaces/offset.interface';
 import { RustOffsets } from './interfaces/rust.interface';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+// Extend dayjs with the plugins
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export class Formatter {
     private offsets: RustOffsets;
-    private message = `Offsets updated by: https://github.com/erobin27/Rust-Data`
+    private message = `Offsets updated by: https://github.com/erobin27/Rust-Data\n// ${dayjs().tz('America/New_York').format('dddd, M/D/YYYY - h:mm:ssA [EST]')}` // Friday, 5/17/2024 - 6:41:11PM EST
 
     constructor(offsets: RustOffsets) {
         this.offsets = offsets;
@@ -16,7 +23,6 @@ export class Formatter {
 
         const variableFormat = (input: {name: string; type: string; offset: string}, tabs = 2) => {
             const { name, type, offset } = input;
-            console.log(type);
             const tab = '\t'.repeat(tabs);
             return `${tab}inline constexpr ::std::ptrdiff_t ${name} = ${offset}; // ${type}\n`;
         };

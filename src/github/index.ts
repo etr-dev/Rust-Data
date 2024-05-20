@@ -1,36 +1,48 @@
 import { createAppAuth } from "@octokit/auth-app";
-import { AuthInterface } from "@octokit/auth-app/dist-types/types";
 import { Octokit } from "@octokit/rest";
 import { readFileSync } from "fs";
 
-export class Github {
-  private secrets: {
-    appId: string;
-    privateKey: string;
-    installationId: string;
-    clientId: string;
-    clientSecret: string;
-  };
+interface Secrets {
+  appId: string;
+  privateKey: string;
+  installationId: string;
+  clientId: string;
+  clientSecret: string;
+}
 
+export class Github {
+  private secrets: Secrets;
   private octokit: Octokit;
-  private auth: AuthInterface;
+  private auth: ReturnType<typeof createAppAuth>;
 
   private username: string;
   private reponame: string;
 
-  constructor(username: string, reponame: string){
+  constructor(username: string, reponame: string) {
     this.username = username;
     this.reponame = reponame;
 
-    const appId = process.env.GITHUB_APP_ID as string;
-    const clientId = process.env.GITHUB_CLIENT_ID as string;
-    const clientSecret = process.env.GITHUB_CLIENT_SECRET as string;
-    const installationId = process.env.GIHUB_INSTALLATION_ID as string;
-    const privateKey = readFileSync(process.env.GITHUB_PEM_PATH as string, 'utf8');
+    const appId = process.env.GITHUB_APP_ID;
+    const clientId = process.env.GITHUB_CLIENT_ID;
+    const clientSecret = process.env.GITHUB_CLIENT_SECRET;
+    const installationId = process.env.GITHUB_INSTALLATION_ID;
+    const privateKeyPath = process.env.GITHUB_PEM_PATH;
 
-    if (!appId || !clientId || !clientSecret || !installationId || !privateKey) {
-      throw new Error('Missing GITHUB auth setup.');
+    
+    const missingVars = [];
+
+    if (!appId) missingVars.push('GITHUB_APP_ID');
+    if (!clientId) missingVars.push('GITHUB_CLIENT_ID');
+    if (!clientSecret) missingVars.push('GITHUB_CLIENT_SECRET');
+    if (!installationId) missingVars.push('GITHUB_INSTALLATION_ID');
+    if (!privateKeyPath) missingVars.push('GITHUB_PEM_PATH');
+
+    if (!appId || !clientId || !clientSecret || !installationId || !privateKeyPath) {
+      console.error('Missing GitHub variables: ', missingVars);
+      throw new Error('Missing GitHub authentication setup.');
     }
+
+    const privateKey = readFileSync(privateKeyPath, 'utf8');
 
     this.secrets = {
       appId,
@@ -38,19 +50,29 @@ export class Github {
       installationId,
       clientId,
       clientSecret,
-    }
+    };
+
+    this.auth = createAppAuth({
+      appId: this.secrets.appId,
+      privateKey: this.secrets.privateKey,
+      clientId: this.secrets.clientId,
+      clientSecret: this.secrets.clientSecret,
+      installationId: parseInt(this.secrets.installationId, 10),
+    });
 
     this.octokit = new Octokit({
       authStrategy: createAppAuth,
-      auth: this.secrets
+      auth: {
+        appId: this.secrets.appId,
+        privateKey: this.secrets.privateKey,
+        installationId: parseInt(this.secrets.installationId, 10),
+      },
     });
-
-    this.auth = createAppAuth(this.secrets);
   }
 
   async getInstallationAccessToken() {
-    const installationAccessToken = await this.auth({ type: "installation" });
-    return installationAccessToken.token;
+    const { token } = await this.auth({ type: "installation" });
+    return token;
   }
 
   async createBlob(content: string) {
@@ -63,7 +85,7 @@ export class Github {
     return data.sha;
   }
 
-  async createTree(baseTreeSha: string, blobs: {path: string, sha: string}[]) {
+  async createTree(baseTreeSha: string, blobs: { path: string, sha: string }[]) {
     const { data } = await this.octokit.git.createTree({
       owner: this.username,
       repo: this.reponame,
@@ -109,12 +131,12 @@ export class Github {
     });
     const baseTreeSha = refData.object.sha;
 
-    const treeSha = await this.createTree(baseTreeSha, [{path: githubPath, sha: blobSha}]);
+    const treeSha = await this.createTree(baseTreeSha, [{ path: githubPath, sha: blobSha }]);
     const commitSha = await this.createCommit(baseTreeSha, treeSha, commitMessage);
     await this.updateRef(commitSha);
   }
 
-  async commitFiles(fileChanges: {filePath: string, githubPath: string}[], commitMessage: string) {
+  async commitFiles(fileChanges: { filePath: string, githubPath: string }[], commitMessage: string) {
     const blobShas = await Promise.all(
       fileChanges.map(async change => ({
         path: change.githubPath,
