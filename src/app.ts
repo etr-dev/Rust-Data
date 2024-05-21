@@ -79,7 +79,7 @@ async function main(steps: ISteps) {
             const gameAssemblyPath = `${rustInstallPath}/GameAssembly.dll`
             const metadataPath = `${rustInstallPath}/RustClient_Data/il2cpp_data/Metadata/global-metadata.dat`
             const il2cppCommand = `${il2cppDumperExecPath} ${gameAssemblyPath} ${metadataPath} ${il2cppDumpOutputPath}`
-            await executeCommand(il2cppCommand, ['/c']);
+            await executeCommand(il2cppCommand);
         }
         
         // PART 3: Dump the rust offsets

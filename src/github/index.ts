@@ -126,6 +126,7 @@ export class Github {
   }
 
   async commitFile(filePath: string, githubPath: string, commitMessage: string) {
+    console.log(`Committing ${filePath} to ${githubPath}`);
     const content = readFileSync(filePath, 'utf8');
     const blobSha = await this.createBlob(content);
 
