@@ -154,6 +154,28 @@ To get a local copy up and running follow these steps.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+### GitHub App Setup
+
+If you need to integrate the app to update your github files you can do the following
+1. Navigate to the app page [https://github.com/settings/apps/offset-updater](https://github.com/settings/apps/offset-updater)
+2. Grab the App ID and Client ID
+
+![appId](images/appId.png)
+
+3. Generate your secret and store it
+
+![secret](/images/secret.png)
+
+4. Generate your private key (.pem) it will download a file for you
+
+![pem](images/pem.png)
+
+5. Find your installation id, idk where you get that.
+
+6. Save all of the data you've gathered in your .env
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 
 <!-- USAGE EXAMPLES -->
 ## Usage
