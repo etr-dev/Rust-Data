@@ -161,6 +161,9 @@ To get a local copy up and running follow these steps.
 1. setup your .env accordingly
 2. run `yarn install`
 3. run `yarn start:dev` and the offsets will be dumped every 5 minutes
+4. you should have files created like this, if so you have setup everything correctly
+
+![text](/images/output.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
