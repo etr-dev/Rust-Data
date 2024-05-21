@@ -45,8 +45,8 @@ async function main(steps: ISteps) {
         }
     }
     
-    const rustInstallPath = `${process.cwd()}/rust_client`;
-    const il2cppDumpOutputPath = `${process.cwd()}/il2cpp/output`;
+    const rustInstallPath = `${process.cwd()}/programs/rust_client`;
+    const il2cppDumpOutputPath = `${process.cwd()}/programs/il2cpp/output`;
     const outputPath = './output';
     const offsetOutputFile = `${outputPath}/rust.h`;// process.env.HEADER_OUTPUT as string;
     const itemIdOutputFile = `${outputPath}/rust_items.h`;
@@ -75,7 +75,7 @@ async function main(steps: ISteps) {
         if (steps.dump) {
             logStep('2️⃣', 'IL2CPP Dump');
 
-            const il2cppDumperExecPath = `${process.cwd()}/il2cpp/Il2CppDumper.exe`;
+            const il2cppDumperExecPath = `${process.cwd()}/programs/il2cpp/Il2CppDumper.exe`;
             const gameAssemblyPath = `${rustInstallPath}/GameAssembly.dll`
             const metadataPath = `${rustInstallPath}/RustClient_Data/il2cpp_data/Metadata/global-metadata.dat`
             const il2cppCommand = `${il2cppDumperExecPath} ${gameAssemblyPath} ${metadataPath} ${il2cppDumpOutputPath}`
@@ -101,26 +101,34 @@ async function main(steps: ISteps) {
             console.log('\t🚚 ItemIds dumped: ', itemIdOutputFile);
         }
 
-        // PART 5: Push offsets to github repo
-        if (steps.github_offsets) {
-            logStep('5️⃣', 'Push offsets to GitHub');
-
-            const github = new Github('erobin27', 'Rust-DMA');
+        
+        if (steps.github_offsets || steps.github_itemIds) {
+            const ghUserName = process.env.TARGET_GH_USERNAME;
+            const ghProjectName = process.env.TARGET_GH_PROJECT;
+            const github = new Github(ghUserName, ghProjectName);
             const date = new Date();
             const time = `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}` 
-            await github.commitFile(offsetOutputFile, 'RustDMA/SDK/rust.h', `Offset & ItemId Updates: ${time}`);
-            console.log('Offsets comitted!', time);
-        }
+            // PART 5: Push offsets to github repo
+            if (steps.github_offsets) {
+                logStep('5️⃣', 'Push offsets to GitHub');
+                const ghOffsetPath = process.env.OFFSET_FILE_PATH;
+                if (!ghOffsetPath) throw new Error('ghOffsetPath is undefined. [process.env.OFFSET_FILE_PATH]');
 
-        // PART 6: Push itemids to github repo
-        if (steps.github_itemIds) {
-            logStep('6️⃣', 'Push item ids to GitHub');
+                const ghOffsetFilePath = `${ghProjectName}/${ghOffsetPath}`;
+                await github.commitFile(offsetOutputFile, ghOffsetFilePath, `Offset & ItemId Updates: ${time}`);
+                console.log('Offsets comitted!', time);
+            }
 
-            const github = new Github('erobin27', 'Rust-DMA');
-            const date = new Date();
-            const time = `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}` 
-            await github.commitFile(itemIdOutputFile, 'RustDMA/SDK/rust_items.h', `ItemId Updates: ${time}`);
-            console.log('Item Ids comitted!', time);
+            // PART 6: Push itemids to github repo
+            if (steps.github_itemIds) {
+                logStep('6️⃣', 'Push item ids to GitHub');
+                const ghItemIdPath = process.env.ITEM_IDS_FILE_PATH;
+                if (!ghItemIdPath) throw new Error('ghItemIdPath is undefined. [process.env.ITEM_IDS_FILE_PATH]');
+
+                const ghItemIdFilePath = `${ghProjectName}/${ghItemIdPath}`;
+                await github.commitFile(itemIdOutputFile, ghItemIdFilePath, `ItemId Updates: ${time}`);
+                console.log('Item Ids comitted!', time);
+            }
         }
     }
 
@@ -150,6 +158,7 @@ const executeTask = async () => {
     count++;
 }
 
-const interval = 5 * 60 * 1000; // 5 minutes in milliseconds
+const minutes = Number(process.env.MINUTES_BETWEEN_CHECKS || '5');
+const interval = minutes * 60 * 1000; // 5 minutes in milliseconds
 executeTask();
 setInterval(executeTask, interval);

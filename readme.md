@@ -113,19 +113,43 @@ To get a local copy up and running follow these steps.
 ### Installation
 
 1. Install node and yarn
-2. Install SteamCMD CLI
+2. Download IL2CPP from github [releases](https://github.com/Perfare/Il2CppDumper/releases/tag/v6.7.40) 
+3. Add the contents to a folder, I suggest saving to `/programs/il2cpp`.
+4. Install SteamCMD CLI
     ```sh
     winget install Valve.SteamCMD
     ```
-3. Clone the repo
+5. Clone the repo
    ```sh
    git clone https://github.com/erobin27/Rust-Data.git
    ```
-3. Install yarn packages
+6. Install yarn packages
    ```sh
    yarn install
    ```
-4. Add you .pem for github
+7. Add you .pem for github, I suggest saving to `/programs`
+8. Setup your .env file, this will include all secret variables and paths to things like il2cpp, output, .pem, etc.
+    ```bash
+    #Example .env File
+    DUMP_CS_PATH='./programs/il2cpp/dump.cs'
+    HEADER_OUTPUT='output/rust.h'
+
+    GITHUB_APP_ID='8897852'
+    GITHUB_CLIENT_ID='Iv1.1d37sdf6s485'
+    GITHUB_CLIENT_SECRET='abcs310sfse356687546ds7sdda1'
+    GITHUB_INSTALLATION_ID='46575654'
+    GITHUB_PEM_PATH='./programs/my-pem.private-key.pem'
+
+    STEAM_USERNAME='steam-name-here'
+    STEAM_PW='steam-pw-here'
+
+    # App Settings
+    MINUTES_BETWEEN_CHECKS='5'
+    TARGET_GH_USERNAME='erobin27'
+    TARGET_GH_PROJECT='RustDMA'
+    OFFSET_FILE_PATH='SDK/rust.h'               # Full path: RustDMA/SDK/rust.h
+    ITEM_IDS_FILE_PATH='SDK/rust_items.h'       # Full path: RustDMA/SDK/rust_items.h
+    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -134,9 +158,9 @@ To get a local copy up and running follow these steps.
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+1. setup your .env accordingly
+2. run `yarn install`
+3. run `yarn start:dev` and the offsets will be dumped every 5 minutes
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -145,30 +169,9 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+- [ ] Setup a frontend
 
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+See the [open issues](https://github.com/erobin27/Rust-Data/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -177,7 +180,7 @@ Don't forget to give the project a star! Thanks again!
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the MIT License.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -186,9 +189,9 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+idgnfs - [@idgnfs](https://twitter.com/idgnfs)
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+Project Link: [https://github.com/erobin27/Rust-Data](https://github.com/erobin27/Rust-Data)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -197,9 +200,8 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
-* []()
-* []()
+* Based on RustBlazeDumper by [Akandesh](https://github.com/Akandesh/BlazeDumper-Rust)
+* Utilizes [Il2CppDumper](https://github.com/Perfare/Il2CppDumper) for dumping unity games
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -207,16 +209,16 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
-[contributors-url]: https://github.com/github_username/repo_name/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo_name.svg?style=for-the-badge
-[forks-url]: https://github.com/github_username/repo_name/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo_name.svg?style=for-the-badge
-[stars-url]: https://github.com/github_username/repo_name/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
-[issues-url]: https://github.com/github_username/repo_name/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/erobin27/Rust-Data.svg?style=for-the-badge
+[contributors-url]: https://github.com/erobin27/Rust-Data/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/erobin27/Rust-Data.svg?style=for-the-badge
+[forks-url]: https://github.com/erobin27/Rust-Data/network/members
+[stars-shield]: https://img.shields.io/github/stars/erobin27/Rust-Data.svg?style=for-the-badge
+[stars-url]: https://github.com/erobin27/Rust-Data/stargazers
+[issues-shield]: https://img.shields.io/github/issues/erobin27/Rust-Data.svg?style=for-the-badge
+[issues-url]: https://github.com/erobin27/Rust-Data/issues
+[license-shield]: https://img.shields.io/github/license/erobin27/Rust-Data.svg?style=for-the-badge
+[license-url]: https://github.com/erobin27/Rust-Data/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
 [product-screenshot]: images/screenshot.png

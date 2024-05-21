@@ -18,7 +18,12 @@ export class Github {
   private username: string;
   private reponame: string;
 
-  constructor(username: string, reponame: string) {
+  constructor(username?: string, reponame?: string) {
+    if(!username || !reponame) {
+      console.error('Missing GitHub name or project name: ', { username, reponame });
+      throw new Error('Missing GitHub names.');
+    }
+
     this.username = username;
     this.reponame = reponame;
 
