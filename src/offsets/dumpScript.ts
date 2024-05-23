@@ -2,7 +2,7 @@ import { Formatter } from "./formatter";
 import { RustOffsets } from "./interfaces/rust.interface";
 import { OffsetDumper } from "./offsetDumper";
 
-export const dumpOffsets = (dumpCsFilePath: string, scriptFilePath: string, outputFilePath: string) => {
+export const dumpOffsets = (dumpCsFilePath: string, scriptFilePath: string, outputFilePath: string, message?: string[]) => {
     const dumper = new OffsetDumper(dumpCsFilePath, scriptFilePath);
 
     // Script Offsets
@@ -72,6 +72,6 @@ export const dumpOffsets = (dumpCsFilePath: string, scriptFilePath: string, outp
         OcclusionCulling_DebugSettings: OcclusionCullin_DebugSettings,
     }
 
-    const formatter = new Formatter(offsets);
+    const formatter = new Formatter(offsets, message);
     formatter.toInlineHeaderFile(outputFilePath);
 }

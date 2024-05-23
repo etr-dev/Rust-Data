@@ -5,10 +5,9 @@ import { spawn } from 'child_process';
 import { ItemIdFormatter } from "./itemIds/itemIdFormatter";
 import { itemIds } from "./itemIds/ids";
 import { dumpOffsets } from "./offsets/dumpScript";
-import { existsSync, mkdirSync, readFile } from "fs";
-import { parseVdf2Json, tempVDFText } from "./temp";
+import { existsSync, mkdirSync } from "fs";
 import { executeCommand } from "./misc/command";
-import { hasBeenUpdated } from "./steamcmd/update";
+import { getBuildId, hasBeenUpdated } from "./steamcmd/update";
 import dayjs from "dayjs";
 import duration from 'dayjs/plugin/duration';
 import utc from 'dayjs/plugin/utc';
@@ -23,6 +22,7 @@ dotenv.config();
 
 interface ISteps {
     update: boolean;
+    buildId: boolean;
     download: boolean;
     dump: boolean;
     offsets: boolean;
@@ -62,6 +62,8 @@ async function main(steps: ISteps) {
 
     // If the game has updated or we are skipping the update check then continue
     if (hasUpdated || !steps.update) {
+        const buildId = steps.buildId ? await getBuildId(rustAppId, versionInfoOutput) : '0';
+
         //PART 1: Download and version check
         if (steps.download) {
             logStep('1️⃣', 'Downloading Rust');
@@ -69,7 +71,6 @@ async function main(steps: ISteps) {
             const updateRustCommand = `steamcmd +force_install_dir ${rustInstallPath} +login ${process.env.STEAM_USERNAME} ${process.env.STEAM_PW} +app_update 252490 validate +quit`;
             await executeCommand(updateRustCommand);
         }
-
 
         //PART 2: Run IL2CPP on Rust
         if (steps.dump) {
@@ -85,10 +86,15 @@ async function main(steps: ISteps) {
         // PART 3: Dump the rust offsets
         if (steps.offsets) {
             logStep('3️⃣', 'Dump the rust offsets');
+            const message = [
+                `Offsets updated by: https://github.com/erobin27/Rust-Data`,
+                `${dayjs().tz('America/New_York').format('dddd, M/D/YYYY - h:mm:ssA [EST]')}`, // Friday, 5/17/2024 - 6:41:11PM EST
+                `BuildId: ${buildId}`
+            ];
 
             const dumpCsPath = `${il2cppDumpOutputPath}/dump.cs`
             const scriptPath = `${il2cppDumpOutputPath}/script.json`
-            dumpOffsets(dumpCsPath, scriptPath, offsetOutputFile);
+            dumpOffsets(dumpCsPath, scriptPath, offsetOutputFile, message);
             console.log('\t🚚 Offsets dumped: ', offsetOutputFile);
         }
 
@@ -114,8 +120,7 @@ async function main(steps: ISteps) {
                 const ghOffsetPath = process.env.OFFSET_FILE_PATH;
                 if (!ghOffsetPath) throw new Error('ghOffsetPath is undefined. [process.env.OFFSET_FILE_PATH]');
 
-                const ghOffsetFilePath = `${ghProjectName}/${ghOffsetPath}`;
-                await github.commitFile(offsetOutputFile, ghOffsetFilePath, `Offset & ItemId Updates: ${time}`);
+                await github.commitFile(offsetOutputFile, ghOffsetPath, `Offset & ItemId Updates: ${time}`);
                 console.log('Offsets comitted!', time);
             }
 
@@ -125,8 +130,7 @@ async function main(steps: ISteps) {
                 const ghItemIdPath = process.env.ITEM_IDS_FILE_PATH;
                 if (!ghItemIdPath) throw new Error('ghItemIdPath is undefined. [process.env.ITEM_IDS_FILE_PATH]');
 
-                const ghItemIdFilePath = `${ghProjectName}/${ghItemIdPath}`;
-                await github.commitFile(itemIdOutputFile, ghItemIdFilePath, `ItemId Updates: ${time}`);
+                await github.commitFile(itemIdOutputFile, ghItemIdPath, `ItemId Updates: ${time}`);
                 console.log('Item Ids comitted!', time);
             }
         }
@@ -136,6 +140,7 @@ async function main(steps: ISteps) {
 
 const steps: ISteps = {
     update: true,
+    buildId: true,
     download: true,
     dump: true,
     offsets: true,

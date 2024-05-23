@@ -1,4 +1,4 @@
-export const tempVDFText = `
+export const exampleVdf = `
 "252490"
 {
     "common"

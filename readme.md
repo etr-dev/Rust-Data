@@ -147,8 +147,8 @@ To get a local copy up and running follow these steps.
     MINUTES_BETWEEN_CHECKS='5'
     TARGET_GH_USERNAME='erobin27'
     TARGET_GH_PROJECT='Rust-DMA'
-    OFFSET_FILE_PATH='SDK/rust.h'               # Full path: Rust-DMA/SDK/rust.h
-    ITEM_IDS_FILE_PATH='SDK/rust_items.h'       # Full path: Rust-DMA/SDK/rust_items.h
+    OFFSET_FILE_PATH='RustDMA/SDK/rust.h'               # Full path: Rust-DMA/RustDMA/SDK/rust.h
+    ITEM_IDS_FILE_PATH='RustDMA/SDK/rust_items.h'       # Full path: Rust-DMA/RustDMA/SDK/rust_items.h
     ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
