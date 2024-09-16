@@ -18,7 +18,7 @@ export interface RustOffsets {
     BaseProjectile: IOffset[],
     Magazine: IOffset[],
     PlayerInventory: IOffset[],
-    ItemContainer: IOffset[],
+    ItemContainer?: IOffset[],
     PlayerModel: IOffset[],
     ModelState: IOffset[],
     Item: IOffset[],

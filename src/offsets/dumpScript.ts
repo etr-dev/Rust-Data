@@ -1,6 +1,7 @@
 import { Formatter } from "./formatter";
 import { RustOffsets } from "./interfaces/rust.interface";
 import { OffsetDumper } from "./offsetDumper";
+import { overrideNames } from "./overrides/override";
 
 export const dumpOffsets = (dumpCsFilePath: string, scriptFilePath: string, outputFilePath: string, message?: string[]) => {
     const dumper = new OffsetDumper(dumpCsFilePath, scriptFilePath);
@@ -14,21 +15,21 @@ export const dumpOffsets = (dumpCsFilePath: string, scriptFilePath: string, outp
     const LocalPlayer_TypeInfo = dumper.scriptScan('LocalPlayer_TypeInfo')
 
     // Class Offsets
-    const BasePlayer = dumper.basicScan("public class BasePlayer : BaseCombatEntity, LootPanel.IHasLootPanel");
-    const BaseEntity = dumper.basicScan("public class BaseEntity : BaseNetworkable, IProvider");
+    const BasePlayer = dumper.basicScan("public class BasePlayer : BaseCombatEntity");
+    const BaseEntity = dumper.basicScan("public class BaseEntity : BaseNetworkable");
     const BaseCombatEntity = dumper.basicScan("public class BaseCombatEntity : BaseEntity");
     const BaseCorpse = dumper.basicScan("public class BaseCorpse : BaseCombatEntity");
-    const LootableCorpse = dumper.basicScan("public class LootableCorpse : BaseCorpse, LootPanel.IHasLootPanel");
+    const LootableCorpse = dumper.basicScan("public class LootableCorpse : BaseCorpse, LootPanel");
     const PlayerCorpse = dumper.basicScan("public class PlayerCorpse : LootableCorpse");
 
     const BuildingPrivlidge = dumper.basicScan("public class BuildingPrivlidge : StorageContainer");
     const BaseProjectile = dumper.basicScan("public class BaseProjectile : AttackEntity");
     const Magazine = dumper.basicScan("public class BaseProjectile.Magazine");
     const PlayerInventory = dumper.basicScan("public class PlayerInventory : EntityComponent<BasePlayer>");
-    const ItemContainer = dumper.basicScan("public sealed class ItemContainer");
-    const PlayerModel = dumper.basicScan("public class PlayerModel : ListComponent<PlayerModel>, IOnParentDestroying");
+    const ItemContainer = dumper.basicScan("public class ItemContainer :");
+    const PlayerModel = dumper.basicScan("public class PlayerModel : ListComponent<PlayerModel>");
     const ModelState = dumper.basicScan("public class ModelState : IDisposable, Pool.IPooled, IProto");
-    const Item = dumper.basicScan("public class Item //");
+    const Item = dumper.basicScan("public class Item :");
     const DroppedItem = dumper.basicScan("public class DroppedItem");
     const WorldItem = dumper.basicScan("public class WorldItem");
     const Model = dumper.basicScan("public class Model : MonoBehaviour, IPrefabPreProcess");
@@ -72,6 +73,6 @@ export const dumpOffsets = (dumpCsFilePath: string, scriptFilePath: string, outp
         OcclusionCulling_DebugSettings: OcclusionCullin_DebugSettings,
     }
 
-    const formatter = new Formatter(offsets, message);
+    const formatter = new Formatter(offsets, message, overrideNames);
     formatter.toInlineHeaderFile(outputFilePath);
 }

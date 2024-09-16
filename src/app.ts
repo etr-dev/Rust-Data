@@ -139,14 +139,14 @@ async function main(steps: ISteps) {
 }
 
 const steps: ISteps = {
-    update: true,
+    update: false,
     buildId: true,
-    download: true,
-    dump: true,
+    download: false,
+    dump: false,
     offsets: true,
-    itemIds: true,
+    itemIds: false,
     github_offsets: true,
-    github_itemIds: true,
+    github_itemIds: false,
 }
 
 let count = 1;
