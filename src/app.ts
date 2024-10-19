@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import { spawn } from 'child_process';
 import { ItemIdFormatter } from "./itemIds/itemIdFormatter";
 import { itemIds } from "./itemIds/ids";
-import { dumpOffsets } from "./offsets/dumpScript";
+import { dumpOffsets, HeurisiticMatching, Paths } from "./offsets/dumpScript";
 import { existsSync, mkdirSync } from "fs";
 import { executeCommand } from "./misc/command";
 import { getBuildId, hasBeenUpdated } from "./steamcmd/update";
@@ -12,6 +12,7 @@ import dayjs from "dayjs";
 import duration from 'dayjs/plugin/duration';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { convertHeaderFileToOffets } from "./offsets/caching/convertHeaderFile";
 
 // Extend dayjs with the plugins
 dayjs.extend(utc);
@@ -48,7 +49,9 @@ async function main(steps: ISteps) {
     const rustInstallPath = `${process.cwd()}/programs/rust_client`;
     const il2cppDumpOutputPath = `${process.cwd()}/programs/il2cpp/output`;
     const outputPath = './output';
+    const cachePath = './cache';
     const offsetOutputFile = `${outputPath}/rust.h`;// process.env.HEADER_OUTPUT as string;
+    const heuristicOffsetOutputFile = `${outputPath}/rust_heur.h`;// process.env.HEADER_OUTPUT as string;
     const itemIdOutputFile = `${outputPath}/rust_items.h`;
     const versionInfoOutput = `${outputPath}/version_info.txt`;
     const rustAppId = '252490';
@@ -87,14 +90,25 @@ async function main(steps: ISteps) {
         if (steps.offsets) {
             logStep('3️⃣', 'Dump the rust offsets');
             const message = [
-                `Offsets updated by: https://github.com/erobin27/Rust-Data`,
+                `Offsets updated by: https://github.com/etr-dev/Rust-Data`,
                 `${dayjs().tz('America/New_York').format('dddd, M/D/YYYY - h:mm:ssA [EST]')}`, // Friday, 5/17/2024 - 6:41:11PM EST
                 `BuildId: ${buildId}`
             ];
 
-            const dumpCsPath = `${il2cppDumpOutputPath}/dump.cs`
-            const scriptPath = `${il2cppDumpOutputPath}/script.json`
-            dumpOffsets(dumpCsPath, scriptPath, offsetOutputFile, message);
+            const heurisiticMatching: HeurisiticMatching = {
+                enable: true,
+                previousBuildId: '0',
+            }
+
+            const paths: Paths = {
+                dumpCsFilePath: `${il2cppDumpOutputPath}/dump.cs`,
+                scriptFilePath: `${il2cppDumpOutputPath}/script.json`,
+                outputFilePath: offsetOutputFile,
+                cacheFileDirectory: cachePath,
+                heuristicOutputFilePath: heuristicOffsetOutputFile,
+            }
+            
+            dumpOffsets(paths, buildId, heurisiticMatching, message);
             console.log('\t🚚 Offsets dumped: ', offsetOutputFile);
         }
 
@@ -120,7 +134,11 @@ async function main(steps: ISteps) {
                 const ghOffsetPath = process.env.OFFSET_FILE_PATH;
                 if (!ghOffsetPath) throw new Error('ghOffsetPath is undefined. [process.env.OFFSET_FILE_PATH]');
 
-                await github.commitFile(offsetOutputFile, ghOffsetPath, `Offset & ItemId Updates: ${time}`);
+                const ghHeurOffsetPath = process.env.HEURISTIC_OFFSET_FILE_PATH;
+                if (!ghHeurOffsetPath) throw new Error('ghHeurOffsetPath is undefined. [process.env.HEURISTIC_OFFSET_FILE_PATH]');
+                // await github.commitFile(offsetOutputFile, ghOffsetPath, `Offset & ItemId Updates: ${time}`);
+
+                await github.commitFiles([{filePath: offsetOutputFile, githubPath: ghOffsetPath}, {filePath: heuristicOffsetOutputFile, githubPath: ghHeurOffsetPath}], `Offsets updated: ${time}`);
                 console.log('Offsets comitted!', time);
             }
 
@@ -139,7 +157,7 @@ async function main(steps: ISteps) {
 }
 
 const steps: ISteps = {
-    update: false,
+    update:  false,
     buildId: true,
     download: false,
     dump: false,
@@ -167,3 +185,5 @@ const minutes = Number(process.env.MINUTES_BETWEEN_CHECKS || '5');
 const interval = minutes * 60 * 1000; // 5 minutes in milliseconds
 executeTask();
 setInterval(executeTask, interval);
+
+// convertHeaderFileToOffets('');

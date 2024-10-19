@@ -1,11 +1,11 @@
-Steam Console Client (c) Valve Corporation - version 1726260406
+Steam Console Client (c) Valve Corporation - version 1728594755
 -- type 'quit' to exit --
 Loading Steam API...OK
 
 Connecting anonymously to Steam Public...OK
 Waiting for client config...OK
 Waiting for user info...OK
-Logging off current session...AppID : 252490, change number : 25217070/0, last change : Mon Sep 16 14:02:09 2024 
+Logging off current session...AppID : 252490, change number : 25586999/25586999, last change : Sat Oct 19 14:05:52 2024 
 "252490"
 {
 	"common"
@@ -508,21 +508,21 @@ Logging off current session...AppID : 252490, change number : 25217070/0, last c
 			{
 				"public"
 				{
-					"gid"		"6600054552688988836"
-					"size"		"32074642360"
-					"download"		"18589705888"
+					"gid"		"2186752218330989978"
+					"size"		"35978624696"
+					"download"		"20119753168"
 				}
 				"last-last-month"
-				{
-					"gid"		"4144932616972347546"
-					"size"		"30497003930"
-					"download"		"18187431008"
-				}
-				"last-month"
 				{
 					"gid"		"2996126714107197916"
 					"size"		"30515458576"
 					"download"		"18185219680"
+				}
+				"last-month"
+				{
+					"gid"		"6464665610856816799"
+					"size"		"32501204440"
+					"download"		"18992553856"
 				}
 			}
 			"encryptedmanifests"
@@ -547,21 +547,21 @@ Logging off current session...AppID : 252490, change number : 25217070/0, last c
 				}
 				"release"
 				{
-					"gid"		"ABAF661A4BCF72F54043D88E8E143CA1"
-					"size"		"EC6953ECF3F2E1E8DBEEE704B5BFFE29"
-					"download"		"81F72617BC6936EDF21E9EEDC3A89FF9"
+					"gid"		"6EECCB12C963029F52F8F6F853CF9762"
+					"size"		"06C69C06FD748CE65A269994834E7326"
+					"download"		"C3609F45A00F8816F9454ABC5620BA0C"
 				}
 				"release-debug"
 				{
-					"gid"		"51C140EA7DC794D7DC37515A0CD21B50"
-					"size"		"E942F4A6894355C575675ADBFBBA7FB7"
-					"download"		"919655CC3B51DC6F437A8CA18C8484DB"
+					"gid"		"7F3B2C30D4333277871637C51A260F39"
+					"size"		"1126255CF0735B55780DBD950FC98A7C"
+					"download"		"A250251022B05840FDD5CD1F6C7CA205"
 				}
 				"test"
 				{
-					"gid"		"B09447B8CC47CDBC6867D40806FAAB71"
-					"size"		"986461ED44B31F7B15C28C753F649992"
-					"download"		"B65CB2478F890C54500E311476074435"
+					"gid"		"49B1D1A24A07A9C63B2D96E74FAB7465"
+					"size"		"F1119757E41C3537B04F5CF86B3B27FF"
+					"download"		"3B6134FD011F611467678F26355772AD"
 				}
 			}
 		}
@@ -576,21 +576,21 @@ Logging off current session...AppID : 252490, change number : 25217070/0, last c
 			{
 				"public"
 				{
-					"gid"		"8903780718631051799"
-					"size"		"4848515008"
-					"download"		"1666534192"
+					"gid"		"2909588532750924236"
+					"size"		"5394880663"
+					"download"		"1784628240"
 				}
 				"last-last-month"
-				{
-					"gid"		"8245167756213863726"
-					"size"		"4927234865"
-					"download"		"1797780608"
-				}
-				"last-month"
 				{
 					"gid"		"1665205188374829540"
 					"size"		"4939089992"
 					"download"		"1803010656"
+				}
+				"last-month"
+				{
+					"gid"		"5753833443433103494"
+					"size"		"4848515094"
+					"download"		"1666544288"
 				}
 			}
 			"encryptedmanifests"
@@ -615,22 +615,22 @@ Logging off current session...AppID : 252490, change number : 25217070/0, last c
 				}
 				"release"
 				{
-					"gid"		"C8D31A7C96258E5412CD65440B24995E"
-					"size"		"87E47C56C6687B739808E3558E747DBA"
-					"download"		"01314F0EC9E05C0B0C547C5B645F8F89"
+					"gid"		"FD394934A053611F9C67FAFC6AF32293"
+					"size"		"79F5125B959029BEE9A11585C2905BE4"
+					"download"		"3DF4DB0739758C399510B3ACA64F73B4"
 				}
 				"release-debug"
 				{
-					"gid"		"25EA0D72E84D5A5BFCD0734061993927"
-					"size"		"20FF472644F7554554D8CB9C1EB01788"
-					"download"		"650769C6BA9EB15D4C90B576A5BBE1DE"
+					"gid"		"D71623ECB7FFA4F0111542DD7259B6CC"
+					"size"		"2BCD2F49958D2628C402321CC766A9C7"
+					"download"		"50B68219DE74122FA14E45C2E24043CE"
 				}
 				"test"
 				{
-					"gid"		"0263CA4815105C5BBA24D921C9B381A2"
-					"size"		"E34144A6E5A31C770D789C71A3BD79B7"
-					"download"		"83CE23C0BE339EB1OK
-782B5A14DE68EC6B"
+					"gid"		"E1C7233FE5564AB6B0A3A3992E611A61"
+					"size"		"C123237470214740B9ACAA99871B544A"
+					"download"		"249451D00OK
+D9492BA0953336F7B701A92"
 				}
 			}
 		}
@@ -646,21 +646,21 @@ Logging off current session...AppID : 252490, change number : 25217070/0, last c
 			{
 				"public"
 				{
-					"gid"		"1120353868771651605"
-					"size"		"634964732"
-					"download"		"274623680"
+					"gid"		"936203676246905579"
+					"size"		"719851182"
+					"download"		"301816672"
 				}
 				"last-last-month"
-				{
-					"gid"		"6926068779370735650"
-					"size"		"721068293"
-					"download"		"429450768"
-				}
-				"last-month"
 				{
 					"gid"		"7636935482705757624"
 					"size"		"818597956"
 					"download"		"452122112"
+				}
+				"last-month"
+				{
+					"gid"		"8215164349022554010"
+					"size"		"698335078"
+					"download"		"288178800"
 				}
 			}
 			"encryptedmanifests"
@@ -685,21 +685,21 @@ Logging off current session...AppID : 252490, change number : 25217070/0, last c
 				}
 				"release"
 				{
-					"gid"		"94979AB842B0025FE25E3CD9FE1B5A90"
-					"size"		"1652A74C83F35DA5A456F52C1518AF67"
-					"download"		"6C9FD8C518903D9D29AC0F3CC6A25EF7"
+					"gid"		"6FE16B79DF92ABCC2C57F6A8D00E38C7"
+					"size"		"7FEF4B90A87C5648A3FCB0DA27A64F56"
+					"download"		"EC9B109BEBC32548E014C1222BC21795"
 				}
 				"release-debug"
 				{
-					"gid"		"6A231133DD090FA8978F91558C6C3635"
-					"size"		"7B6573C6C4EC423C933DE3BA625B9D75"
-					"download"		"79A73C959B8D23D9965248A946EF4691"
+					"gid"		"3720520851A4B031FDA663A582217D1E"
+					"size"		"8CA16CAD905951DF97246A2BA4345659"
+					"download"		"58A2194221CF4A935AB11FF3410814D3"
 				}
 				"test"
 				{
-					"gid"		"AE88843CABF945DFE346FCA43F8F05E0"
-					"size"		"ED61CD68A09BF55CFEC0A92A359676B9"
-					"download"		"9AF84ABEAAF478161B7CC3C61F581DEE"
+					"gid"		"865FFA9095924B9E6EFBDA51AB73A503"
+					"size"		"921FCBE426A2E812C3C9ACB1021D58BD"
+					"download"		"008F7B68282D7EA7E5755E76A19BB477"
 				}
 			}
 		}
@@ -707,8 +707,8 @@ Logging off current session...AppID : 252490, change number : 25217070/0, last c
 		{
 			"public"
 			{
-				"buildid"		"15629969"
-				"timeupdated"		"1725870302"
+				"buildid"		"15958008"
+				"timeupdated"		"1728394488"
 			}
 			"debug"
 			{
@@ -730,33 +730,33 @@ Logging off current session...AppID : 252490, change number : 25217070/0, last c
 			}
 			"last-last-month"
 			{
-				"buildid"		"15094309"
+				"buildid"		"15543927"
 				"description"		"Last last months patch"
-				"timeupdated"		"1725556527"
+				"timeupdated"		"1727972133"
 			}
 			"last-month"
 			{
-				"buildid"		"15543927"
+				"buildid"		"15806835"
 				"description"		"Last months patch"
-				"timeupdated"		"1725556613"
+				"timeupdated"		"1727972174"
 			}
 			"release"
 			{
-				"buildid"		"15653848"
+				"buildid"		"15958008"
 				"pwdrequired"		"1"
-				"timeupdated"		"1725986493"
+				"timeupdated"		"1728330530"
 			}
 			"release-debug"
 			{
-				"buildid"		"15653908"
+				"buildid"		"15958036"
 				"pwdrequired"		"1"
-				"timeupdated"		"1725986792"
+				"timeupdated"		"1728330711"
 			}
 			"test"
 			{
-				"buildid"		"15604443"
+				"buildid"		"15908335"
 				"pwdrequired"		"1"
-				"timeupdated"		"1725556329"
+				"timeupdated"		"1727972105"
 			}
 		}
 	}
@@ -787,3 +787,56 @@ Redirecting stderr to 'C:\Users\etrde\AppData\Local\Microsoft\WinGet\Packages\Va
 Logging directory: 'C:\Users\etrde\AppData\Local\Microsoft\WinGet\Packages\Valve.SteamCMD_Microsoft.Winget.Source_8wekyb3d8bbwe/logs'
 [  0%] Checking for available updates...
 [----] Verifying installation...
+Redirecting stderr to 'C:\Users\etrde\AppData\Local\Microsoft\WinGet\Packages\Valve.SteamCMD_Microsoft.Winget.Source_8wekyb3d8bbwe\logs\stderr.txt'
+Logging directory: 'C:\Users\etrde\AppData\Local\Microsoft\WinGet\Packages\Valve.SteamCMD_Microsoft.Winget.Source_8wekyb3d8bbwe/logs'
+[  0%] Checking for available updates...
+[----] Verifying installation...
+[  0%] Downloading update...
+[  0%] Checking for available updates...
+[----] Download complete.
+[----] Extracting package...
+[----] Extracting package...
+[----] Extracting package...
+[----] Extracting package...
+[----] Extracting package...
+[----] Extracting package...
+[----] Installing update...
+[----] Installing update...
+[----] Installing update...
+[----] Installing update...
+[----] Installing update...
+[----] Installing update...
+[----] Installing update...
+[----] Installing update...
+[----] Failed to clean up after update, continuing...
+[----] Cleaning up...
+[----] Update complete, launching Steamcmd...
+Redirecting stderr to 'C:\Users\etrde\AppData\Local\Microsoft\WinGet\Packages\Valve.SteamCMD_Microsoft.Winget.Source_8wekyb3d8bbwe\logs\stderr.txt'
+Logging directory: 'C:\Users\etrde\AppData\Local\Microsoft\WinGet\Packages\Valve.SteamCMD_Microsoft.Winget.Source_8wekyb3d8bbwe/logs'
+[  0%] Checking for available updates...
+[----] Downloading update (50 of 16,516 KB)...
+[  0%] Downloading update (3,423 of 16,516 KB)...
+[ 20%] Downloading update (7,535 of 16,516 KB)...
+[ 45%] Downloading update (9,897 of 16,516 KB)...
+[ 59%] Downloading update (12,768 of 16,516 KB)...
+[ 77%] Downloading update (15,432 of 16,516 KB)...
+[ 93%] Downloading update (16,516 of 16,516 KB)...
+[100%] Download complete.
+[----] Installing update...
+[----] Extracting package...
+[----] Extracting package...
+[----] Extracting package...
+[----] Extracting package...
+[----] Extracting package...
+[----] Extracting package...
+[----] Installing update...
+[----] Installing update...
+[----] Installing update...
+[----] Installing update...
+[----] Installing update...
+[----] Installing update...
+[----] Installing update...
+[----] Installing update...
+[----] Failed to clean up after update, continuing...
+[----] Cleaning up...
+[----] Update complete, launching Steamcmd...

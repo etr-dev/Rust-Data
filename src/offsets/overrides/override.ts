@@ -22,7 +22,6 @@ export const overrideNames = (variable: IVariable): string | undefined => {
             // console.warn(`The class that the variable is a part of is not supported: ${className}`);
     }
 
-    if (updatedName) console.log(updatedName);
     return updatedName;
 }
 
@@ -30,8 +29,6 @@ const basePlayerOverrides = (variable: IVariable): string | undefined => {
     const { name, type } = variable;
     let output;
 
-    
-    // console.log(name, type);
     return (
         strictEqual(name, '%c306008ca627b46d398b20cda76150fbd8ba72b8', 'bagCount') ??
         strictEqual(type, 'GameObject', '_lookingAt') ??

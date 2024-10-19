@@ -21,6 +21,7 @@
     "dotenv": "^16.4.5",
     "json5": "^2.2.3",
     "jsonwebtoken": "^9.0.2",
+    "openai": "^4.68.1",
     "rimraf": "^5.0.5",
     "simple-vdf": "^1.1.1",
     "typescript": "^5.4.5",

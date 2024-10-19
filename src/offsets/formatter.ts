@@ -21,6 +21,7 @@ export interface IVariable {
     name: string;
     type: string;
     offset: string;
+    score?: number;
     className?: string;
 }
 
@@ -41,11 +42,12 @@ export class Formatter {
         let fileContent = '';
 
         const variableFormat = (input: IVariable, tabs = 2) => {
-            const { name, type, offset } = input;
+            const { name, type, offset, score } = input;
             const tab = '\t'.repeat(tabs);
             const overridedName = this.overrides ? this.overrides(input) ?? name : name;
             const formattedName = overridedName.replace('%', '_');
-            return `${tab}inline constexpr ::std::ptrdiff_t ${formattedName} = ${offset}; // ${type}\n`;
+            const comment = score ? `${type} (${score})` : `${type}`
+            return `${tab}inline constexpr ::std::ptrdiff_t ${formattedName} = ${offset}; // ${comment}\n`;
         };
 
         fileContent += `#pragma once\n`;
@@ -73,6 +75,11 @@ export class Formatter {
         fileContent += `}`;
 
         // Write the content to the file
+        writeFileSync(outputPath, fileContent);
+    } 
+
+    toCacheFile(outputPath: string): void {
+        const fileContent = JSON.stringify(this.offsets);
         writeFileSync(outputPath, fileContent);
     } 
 }

@@ -1,9 +1,27 @@
+import { createDirectoryIfNotExists } from "../misc/createDirectory";
+import { loadFromCache } from "./caching/loadFromCache";
 import { Formatter } from "./formatter";
+import { performHeuristicMatching } from "./heuristics/performHeuristicMatching";
 import { RustOffsets } from "./interfaces/rust.interface";
 import { OffsetDumper } from "./offsetDumper";
 import { overrideNames } from "./overrides/override";
 
-export const dumpOffsets = (dumpCsFilePath: string, scriptFilePath: string, outputFilePath: string, message?: string[]) => {
+export interface HeurisiticMatching {
+    enable: boolean;
+    previousBuildId?: string;
+    useHeuristicCache?: boolean;
+}
+
+export interface Paths {
+    dumpCsFilePath: string;
+    scriptFilePath: string;
+    outputFilePath: string;
+    heuristicOutputFilePath: string;
+    cacheFileDirectory: string;
+}
+
+export const dumpOffsets = (paths: Paths, buildId: string, matching: HeurisiticMatching, message?: string[],) => {
+    const { dumpCsFilePath, scriptFilePath, outputFilePath, cacheFileDirectory, heuristicOutputFilePath } = paths;
     const dumper = new OffsetDumper(dumpCsFilePath, scriptFilePath);
 
     // Script Offsets
@@ -73,6 +91,24 @@ export const dumpOffsets = (dumpCsFilePath: string, scriptFilePath: string, outp
         OcclusionCulling_DebugSettings: OcclusionCullin_DebugSettings,
     }
 
-    const formatter = new Formatter(offsets, message, overrideNames);
-    formatter.toInlineHeaderFile(outputFilePath);
+    const rawFormatter = new Formatter(offsets, message, overrideNames);
+    createDirectoryIfNotExists(`${cacheFileDirectory}/builds/${buildId}`)
+    rawFormatter.toCacheFile(`${cacheFileDirectory}/builds/${buildId}/${buildId}.json`);
+    rawFormatter.toInlineHeaderFile(`${cacheFileDirectory}/builds/${buildId}/${buildId}.h`);
+    rawFormatter.toInlineHeaderFile(outputFilePath);
+
+    if (!matching.enable) return;
+
+    const { previousBuildId } = matching;
+    const previousOffsets = loadFromCache(`${cacheFileDirectory}/builds/${previousBuildId}/${previousBuildId}.json`);
+    
+    const heuristicOffsets = performHeuristicMatching({
+        previousOffsets,
+        currentOffsets: offsets,
+    });
+
+    const heuristicFormatter = new Formatter(heuristicOffsets, [...message as Array<string>, 'Based on heuristic offset comparisons. Use with caution.']);
+    heuristicFormatter.toCacheFile(`${cacheFileDirectory}/builds/${buildId}/${buildId}_heur.json`);
+    heuristicFormatter.toInlineHeaderFile(`${cacheFileDirectory}/builds/${buildId}/${buildId}_heur.h`);
+    heuristicFormatter.toInlineHeaderFile(heuristicOutputFilePath);
 }
