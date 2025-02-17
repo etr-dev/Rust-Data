@@ -38,7 +38,7 @@ export class Formatter {
         this.overrides = overrides;
     }
 
-    toInlineHeaderFile(outputPath: string): void {
+    toInlineHeaderFile(outputPath: string, namespaceTitle = 'RustOffsets'): void {
         let fileContent = '';
 
         const variableFormat = (input: IVariable, tabs = 2) => {
@@ -55,7 +55,7 @@ export class Formatter {
         fileContent += `\n`;
         this.message?.forEach(line => fileContent += `// ${line}\n`);
         fileContent += `\n`;
-        fileContent += `namespace RustOffsets {\n`;
+        fileContent += `namespace ${namespaceTitle} {\n`;
 
         Object.keys(this.offsets).forEach(className => {
             if(!this.offsets[className]) return;

@@ -97,18 +97,18 @@ export const dumpOffsets = (paths: Paths, buildId: string, matching: HeurisiticM
     rawFormatter.toInlineHeaderFile(`${cacheFileDirectory}/builds/${buildId}/${buildId}.h`);
     rawFormatter.toInlineHeaderFile(outputFilePath);
 
-    if (!matching.enable) return;
+    // if (!matching.enable) return;
 
-    const { previousBuildId } = matching;
-    const previousOffsets = loadFromCache(`${cacheFileDirectory}/builds/${previousBuildId}/${previousBuildId}.json`);
+    // const { previousBuildId } = matching;
+    // const previousOffsets = loadFromCache(`${cacheFileDirectory}/builds/${previousBuildId}/${previousBuildId}.json`);
     
-    const heuristicOffsets = performHeuristicMatching({
-        previousOffsets,
-        currentOffsets: offsets,
-    });
+    // const heuristicOffsets = performHeuristicMatching({
+    //     previousOffsets,
+    //     currentOffsets: offsets,
+    // });
 
-    const heuristicFormatter = new Formatter(heuristicOffsets, [...message as Array<string>, 'Based on heuristic offset comparisons. Use with caution.']);
-    heuristicFormatter.toCacheFile(`${cacheFileDirectory}/builds/${buildId}/${buildId}_heur.json`);
-    heuristicFormatter.toInlineHeaderFile(`${cacheFileDirectory}/builds/${buildId}/${buildId}_heur.h`);
-    heuristicFormatter.toInlineHeaderFile(heuristicOutputFilePath);
+    // const heuristicFormatter = new Formatter(heuristicOffsets, [...message as Array<string>, 'Based on heuristic offset comparisons. Use with caution.']);
+    // heuristicFormatter.toCacheFile(`${cacheFileDirectory}/builds/${buildId}/${buildId}_heur.json`);
+    // heuristicFormatter.toInlineHeaderFile(`${cacheFileDirectory}/builds/${buildId}/${buildId}_heur.h`, 'HeurRustOffsets');
+    // heuristicFormatter.toInlineHeaderFile(heuristicOutputFilePath, 'HeurRustOffsets');
 }

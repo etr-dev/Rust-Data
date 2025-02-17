@@ -186,4 +186,6 @@ const interval = minutes * 60 * 1000; // 5 minutes in milliseconds
 executeTask();
 setInterval(executeTask, interval);
 
-// convertHeaderFileToOffets('');
+// const offsets = convertHeaderFileToOffets('A:\\Programming\\Gaming\\Rust-Data\\cache\\builds\\0\\0.h');
+// console.log(JSON.stringify(offsets));
+

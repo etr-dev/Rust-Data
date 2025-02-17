@@ -2,7 +2,7 @@
 #include <cstdint>
 
 // Offsets updated by: https://github.com/etr-dev/Rust-Data
-// Saturday, 10/19/2024 - 3:05:59PM EST
+// Saturday, 10/19/2024 - 4:14:30PM EST
 // BuildId: 15958008
 
 namespace RustOffsets {
