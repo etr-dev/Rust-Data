@@ -2,8 +2,8 @@
 #include <cstdint>
 
 // Offsets updated by: https://github.com/etr-dev/Rust-Data
-// Saturday, 10/19/2024 - 4:14:30PM EST
-// BuildId: 15958008
+// Monday, 2/17/2025 - 1:08:26AM EST
+// BuildId: 17307542
 
 namespace RustOffsets {
 	inline constexpr ::std::ptrdiff_t BaseEntity_TypeInfo = 0x3c8df20; // BaseEntity_TypeInfo

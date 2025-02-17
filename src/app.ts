@@ -157,10 +157,10 @@ async function main(steps: ISteps) {
 }
 
 const steps: ISteps = {
-    update:  false,
+    update:  true,
     buildId: true,
-    download: false,
-    dump: false,
+    download: true,
+    dump: true,
     offsets: true,
     itemIds: false,
     github_offsets: true,
@@ -176,7 +176,7 @@ const executeTask = async () => {
     await main(steps).catch(err => error = err)
 
     const duration = dayjs.duration(dayjs().diff(startTime));
-    error ? console.error(`\n❌ Failed execution ${count} in ${duration.format('HH:mm:ss')}.\n${error}\n`) : console.log(`\n✅ Finished execution ${count} in ${duration.format('HH:mm:ss')}.\n`);
+    error ? console.error(`\n❌ Failed execution ${count} in ${duration.format('HH:mm:ss')}.`, error) : console.log(`\n✅ Finished execution ${count} in ${duration.format('HH:mm:ss')}.\n`);
     console.log('\n\n\n');
     count++;
 }
